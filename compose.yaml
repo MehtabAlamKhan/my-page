@@ -1,0 +1,8 @@
+services:
+  my-page:
+    image: my-page
+    container_name: c1
+    build: .
+    ports:
+      - '443:443'
+      - '80:80'
