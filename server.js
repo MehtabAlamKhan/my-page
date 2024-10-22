@@ -34,7 +34,6 @@ server.on("stream", (stream, headers) => {
       ...corsHeaders,
     });
     stream.end(homePage);
-    cluster.worker.kill();
   }
   if (headers[":path"] == "/F.ttf") {
     stream.respond({
