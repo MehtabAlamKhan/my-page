@@ -11,22 +11,35 @@ const __dirname = path.dirname(__filename);
 let server = http2.createSecureServer({
   key: fs.readFileSync(path.join(__dirname, "cert", "key.pem")),
   cert: fs.readFileSync(path.join(__dirname, "cert", "cert.pem")),
+  minVersion: "TLSv1.3",
 });
 
 let homePage = fs.readFileSync(path.join(__dirname, "static", "index.html"));
+let font = fs.readFileSync(path.join(__dirname, "static", "F.ttf"), (err) => {});
 
 let corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
 };
 
-server.on("stream", (stream) => {
-  stream.respond({
-    status: 200,
-    "Content-Type": "text/html",
-    ...corsHeaders,
-  });
-  stream.end(homePage);
+server.on("stream", (stream, headers) => {
+  if (headers[":path"] == "/") {
+    stream.respond({
+      ":status": 200,
+      "Content-Type": "text/html;charset=utf-8",
+      ...corsHeaders,
+    });
+    stream.end(homePage);
+  }
+  if (headers[":path"] == "/F.ttf") {
+    stream.respond({
+      ":status": 200,
+      "content-type": "font/ttf",
+      "Content-Length": 188504,
+      ...corsHeaders,
+    });
+    stream.end(font);
+  }
 });
 server.on("sessionError", (err) => {
   console.log(err);
