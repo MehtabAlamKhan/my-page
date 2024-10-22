@@ -3,6 +3,10 @@ import http from "node:http";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "url";
+import os from "node:os";
+import cluster from "node:cluster";
+
+const cores = os.cpus().length;
 
 // Get the __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
@@ -30,6 +34,7 @@ server.on("stream", (stream, headers) => {
       ...corsHeaders,
     });
     stream.end(homePage);
+    cluster.worker.kill();
   }
   if (headers[":path"] == "/F.ttf") {
     stream.respond({
@@ -42,19 +47,27 @@ server.on("stream", (stream, headers) => {
   }
 });
 server.on("sessionError", (err) => {
-  console.log(err);
+  // console.log(err);
 });
 server.on("error", (err) => {
-  console.log(err);
+  // console.log(err);
 });
 
-server.listen(443, () => {
-  console.log("SERVER RUNNING ON PORT 443");
-});
-
-let redirectServer = http
-  .createServer((req, res) => {
-    res.writeHead(301, { Location: "https://" + req.headers.host + req.url });
-    res.end();
-  })
-  .listen(80, () => console.log("REDIRECT SERVER RUNNING ON PORT 80"));
+if (cluster.isPrimary) {
+  for (let i = 0; i < cores; i++) {
+    cluster.fork();
+  }
+  cluster.on("exit", (worker, code, signal) => {
+    cluster.fork();
+  });
+} else {
+  server.listen(443, () => {
+    // console.log("SERVER RUNNING ON PORT 443");
+  });
+  let redirectServer = http
+    .createServer((req, res) => {
+      res.writeHead(301, { Location: "https://" + req.headers.host + req.url });
+      res.end();
+    })
+    .listen(80, () => {});
+}
