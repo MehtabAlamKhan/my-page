@@ -34,6 +34,7 @@ server.on("stream", (stream, headers) => {
       ...corsHeaders,
     });
     stream.end(homePage);
+    return;
   }
   if (headers[":path"] == "/F.ttf") {
     stream.respond({
@@ -43,6 +44,7 @@ server.on("stream", (stream, headers) => {
       ...corsHeaders,
     });
     stream.end(font);
+    return;
   }
 });
 server.on("sessionError", (err) => {
