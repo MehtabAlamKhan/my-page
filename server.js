@@ -16,6 +16,13 @@ let server = http2.createSecureServer({
   key: fs.readFileSync(path.join(__dirname, "cert", "key.pem")),
   cert: fs.readFileSync(path.join(__dirname, "cert", "cert.pem")),
   minVersion: "TLSv1.3",
+  maxHttp2Streams: 100, // Adjust this number based on your testing needs
+  settings: {
+    // Keep-alive settings
+    MAX_CONCURRENT_STREAMS: 100, // Max streams per connection
+    MAX_FRAME_SIZE: 16384, // Max frame size (default: 16384)
+    MAX_HEADER_LIST_SIZE: 8190, // Max header list size (default: 8190)
+  },
 });
 
 let homePage = fs.readFileSync(path.join(__dirname, "static", "index.html"));
