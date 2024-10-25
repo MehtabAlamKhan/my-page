@@ -61,21 +61,21 @@ server.on("error", (err) => {
   // console.log(err);
 });
 
-if (cluster.isPrimary) {
-  for (let i = 0; i < cores; i++) {
-    cluster.fork();
-  }
-  cluster.on("exit", (worker, code, signal) => {
-    cluster.fork();
-  });
-} else {
-  server.listen(443, () => {
-    // console.log("SERVER RUNNING ON PORT 443");
-  });
-  let redirectServer = http
-    .createServer((req, res) => {
-      res.writeHead(301, { Location: "https://" + req.headers.host + req.url });
-      res.end();
-    })
-    .listen(80, () => {});
-}
+// if (cluster.isPrimary) {
+//   for (let i = 0; i < cores; i++) {
+//     cluster.fork();
+//   }
+//   cluster.on("exit", (worker, code, signal) => {
+//     cluster.fork();
+//   });
+// } else {
+// }
+server.listen(443, () => {
+  // console.log("SERVER RUNNING ON PORT 443");
+});
+let redirectServer = http
+  .createServer((req, res) => {
+    res.writeHead(301, { Location: "https://" + req.headers.host + req.url });
+    res.end();
+  })
+  .listen(80, () => {});
