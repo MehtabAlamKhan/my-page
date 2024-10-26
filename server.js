@@ -65,10 +65,10 @@ if (cluster.isPrimary) {
   server.listen(443, () => {
     // console.log("SERVER RUNNING ON PORT 443");
   });
-  let redirectServer = http
-    .createServer((req, res) => {
-      res.writeHead(301, { Location: "https://" + req.headers.host + req.url });
-      res.end();
-    })
-    .listen(80, () => {});
+  // let redirectServer = http
+  //   .createServer((req, res) => {
+  //     res.writeHead(301, { Location: "https://" + req.headers.host + req.url });
+  //     res.end();
+  //   })
+  //   .listen(8080, () => {});
 }
