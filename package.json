@@ -4,11 +4,14 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server .js",
+    "start": "ENV=PROD node server.js",
     "dev": "node --watch server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
 }
