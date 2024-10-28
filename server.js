@@ -48,7 +48,7 @@ server.on("stream", (stream, headers) => {
       "Content-Encoding": "gzip",
       ...corsHeaders,
     });
-    stream.end(compress(minifier.minify(homePage, { removeAttributeQuotes: true })));
+    stream.end(compress(minifier.minify(homePage, { removeAttributeQuotes: true, removeComments: true })));
     return;
   }
   if (headers[":path"] == "/F.woff") {
