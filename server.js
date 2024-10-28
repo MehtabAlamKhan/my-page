@@ -71,6 +71,9 @@ server.on("error", (err) => {
 server.listen(443, () => {
   // console.log("SERVER RUNNING ON PORT 443");
 });
+process.on("uncaughtException", (err) => {
+  console.log("uncaughtException", err);
+});
 
 // if (cluster.isPrimary) {
 //   for (let i = 0; i < cores; i++) {
