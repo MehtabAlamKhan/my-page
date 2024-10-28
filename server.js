@@ -55,7 +55,7 @@ server.on("stream", (stream, headers) => {
   if (headers[":path"] == "/F.woff") {
     stream.respond({
       ":status": 200,
-      "content-type": "font/woff",
+      "content-type": "application/font-woff",
       "Content-Length": 188504,
       "Content-Encoding": "gzip",
       ...corsHeaders,
