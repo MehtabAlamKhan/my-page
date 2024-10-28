@@ -7,6 +7,7 @@ import os from "node:os";
 import cluster from "node:cluster";
 import dotenv from "dotenv";
 import zlib from "node:zlib";
+import minifier from "html-minifier";
 
 // Get the __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
@@ -15,17 +16,14 @@ const cores = os.cpus().length;
 
 let keyPath = "";
 let certPath = "";
-let homePage;
 
 console.log(process.env.ENV);
 if (process.env.ENV === "PROD") {
   keyPath = "/etc/letsencrypt/live/mehtab.in/privkey.pem";
   certPath = "/etc/letsencrypt/live/mehtab.in/fullchain.pem";
-  homePage = fs.readFileSync(path.join(__dirname, "static", "minify.html"));
 } else {
   keyPath = path.join(__dirname, "cert", "key.pem");
   certPath = path.join(__dirname, "cert", "cert.pem");
-  homePage = fs.readFileSync(path.join(__dirname, "static", "index.html"));
 }
 
 let server = http2.createSecureServer({
@@ -34,6 +32,7 @@ let server = http2.createSecureServer({
   minVersion: "TLSv1.3",
 });
 
+let homePage = fs.readFileSync(path.join(__dirname, "static", "index.html")).toString("utf-8");
 let font = fs.readFileSync(path.join(__dirname, "static", "F.woff"));
 
 let corsHeaders = {
@@ -49,7 +48,7 @@ server.on("stream", (stream, headers) => {
       "Content-Encoding": "gzip",
       ...corsHeaders,
     });
-    stream.end(compress(homePage));
+    stream.end(compress(minifier.minify(homePage, { removeAttributeQuotes: true })));
     return;
   }
   if (headers[":path"] == "/F.woff") {
