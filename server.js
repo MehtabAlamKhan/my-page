@@ -1,30 +1,16 @@
 import http2 from "node:http2";
-import http from "node:http";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "url";
-import os from "node:os";
-import cluster from "node:cluster";
-import dotenv from "dotenv";
 import zlib from "node:zlib";
 import minifier from "html-minifier";
 
 // Get the __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const cores = os.cpus().length;
 
-let keyPath = "";
-let certPath = "";
-
-console.log(process.env.ENV);
-if (process.env.ENV === "PROD") {
-  keyPath = "/etc/letsencrypt/live/mehtab.in/privkey.pem";
-  certPath = "/etc/letsencrypt/live/mehtab.in/fullchain.pem";
-} else {
-  keyPath = path.join(__dirname, "cert", "key.pem");
-  certPath = path.join(__dirname, "cert", "cert.pem");
-}
+let keyPath = path.join(__dirname, "cert", "key.pem");
+let certPath = path.join(__dirname, "cert", "cert.pem");
 
 let server = http2.createSecureServer({
   key: fs.readFileSync(keyPath),
@@ -62,35 +48,14 @@ server.on("stream", (stream, headers) => {
     return;
   }
 });
-server.on("sessionError", (err) => {
-  // console.log(err);
-});
-server.on("error", (err) => {
-  // console.log(err);
-});
-server.listen(443, () => {
-  // console.log("SERVER RUNNING ON PORT 443");
-});
+server.on("sessionError", (err) => {});
+server.on("error", (err) => {});
+
 process.on("uncaughtException", (err) => {
   console.log("uncaughtException", err);
 });
 
-// if (cluster.isPrimary) {
-//   for (let i = 0; i < cores; i++) {
-//     cluster.fork();
-//   }
-//   cluster.on("exit", (worker, code, signal) => {
-//     cluster.fork();
-//   });
-// } else {
-
-//   let redirectServer = http
-//     .createServer((req, res) => {
-//       res.writeHead(301, { Location: "https://" + req.headers.host + req.url });
-//       res.end();
-//     })
-//     .listen(8080, () => {});
-// }
+server.listen(443, () => {});
 
 function compress(data) {
   return zlib.gzipSync(data, { level: 9 });
