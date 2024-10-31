@@ -66,9 +66,9 @@
         }
 
         #pi5 {
-            height: 30px;
-            width: 223px;
             animation: slideIn 0.5s ease-out;
+            transition: transform 0.5s ease;
+            transform-origin: center;
         }
 
         h2 {
@@ -210,7 +210,8 @@
             }
 
             #pi5 {
-                transform: scale(75%);
+                transition: transform 0.5s ease;
+                transform-origin: center;
             }
         }
 
@@ -261,7 +262,8 @@
         <div class="withpi5">
             <h2>
                 Self Hosting On My RP5 With ARM Cortex-A76 CPU
-            </h2><svg id="pi5" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+            </h2><svg id="pi5" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="30"
+                viewBox="0 0 223 30" width="223">
                 <defs>
                     <linearGradient id="gradient1" x1="0%" y1="0%" x2="40%" y2="50%">
                         <stop offset="0%" style="stop-color:rgb(117, 32, 207);stop-opacity:1" />
