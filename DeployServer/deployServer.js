@@ -2,7 +2,7 @@ import http from "node:http";
 
 const deployServer = http
   .createServer((req, res) => {
-    let msg;
+    let msg = "";
     req.on("data", (chunk) => {
       msg += chunk.toString("utf-8");
     });

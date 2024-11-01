@@ -3,17 +3,22 @@ import http from "node:http";
 let data = JSON.stringify({ msg: "DEPLOY" });
 
 const options = {
-  hostname: "http://deploy.mehtab.in",
+  hostname: "deploy.mehtab.in",
   port: 8080,
-  path: "/",
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    "Content-Length": Buffer.byteLength(data),
+    "Content-Length": data.length,
   },
 };
 
-const req = http.request(options, (res) => {});
-req.on("error", (error) => {});
+const req = http.request(options, (res) => {
+  res.on("end", () => {
+    process.exit(0);
+  });
+});
+req.on("error", (error) => {
+  process.exit(1);
+});
 req.write(data);
 req.end();
