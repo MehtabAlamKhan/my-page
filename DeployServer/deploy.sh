@@ -2,6 +2,7 @@
 
 # Define your project directory
 PROJECT_DIR="/home/jason5/my-page"
+git config --global --add safe.directory "$PROJECT_DIR" || { log "Failed to set safe.directory in Git."; exit 1; }
 
 # Function to log messages
 log() {
@@ -43,7 +44,7 @@ else
 fi
 
 # Run Docker Compose to rebuild and start containers
-if docker-compose up -d --build; then
+if docker compose up -d --build; then
     log "Docker Compose started successfully."
 else
     log "Failed to run Docker Compose."
