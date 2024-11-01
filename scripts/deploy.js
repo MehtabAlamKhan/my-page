@@ -1,6 +1,6 @@
 import http2 from "node:http2";
 let data = JSON.stringify({ msg: "DEPLOY" });
-const client = http2.connect("https://deploy.mehtab.in", {
+const client = http2.connect("", {
   rejectUnauthorized: true,
 });
 
