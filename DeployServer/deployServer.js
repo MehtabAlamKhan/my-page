@@ -35,7 +35,7 @@ function startDeployment(msg) {
   if (JSON.parse(msg).msg == "DEPLOY") {
     const scriptPath = "./deploy.sh";
 
-    const deployProcess = exec(`bash ${scriptPath}`, (error, stdout, stderr) => {
+    const deployProcess = exec(`/usr/bin/bash ${scriptPath}`, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing script: ${error.message}`);
         return;
