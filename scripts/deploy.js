@@ -1,25 +1,25 @@
-import http from "node:http";
-
+import http2 from "node:http2";
 let data = JSON.stringify({ msg: "DEPLOY" });
+const client = http2.connect("https://deploy.mehtab.in", {
+  rejectUnauthorized: true,
+});
 
-const options = {
-  hostname: "127.0.0.1",
-  port: 8080,
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Content-Length": data.length,
-  },
-};
+const req = client.request({
+  ":path": "/",
+  ":method": "POST",
+  "Content-Type": "application/json",
+  "Content-Length": Buffer.byteLength(data),
+});
 
-const req = http.request(options, (res) => {
-  res.on("end", () => {
-    process.exit(0);
+// Handle the response from the server
+req.on("response", (headers, flags) => {
+  req.on("data", (chunk) => {
+    console.log(chunk.toString());
+  });
+  req.on("end", () => {
+    client.close();
   });
 });
-req.on("error", (error) => {
-  console.log(error);
-  process.exit(1);
-});
+
 req.write(data);
 req.end();

@@ -1,16 +1,34 @@
-import http from "node:http";
+import http2 from "node:http2";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+import fs from "node:fs";
 
-const deployServer = http
-  .createServer((req, res) => {
-    console.log(req.socket.remoteAddress);
-    let msg = "";
-    req.on("data", (chunk) => {
-      msg += chunk.toString();
-    });
-    req.on("close", () => {
-      console.log(msg);
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ status: 200, message: "Message received" }));
-    });
-  })
-  .listen(8080);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+let keyPath = path.join(__dirname, "cert", "key.pem");
+let certPath = path.join(__dirname, "cert", "cert.pem");
+
+let deployServer = http2.createSecureServer({
+  key: fs.readFileSync(keyPath),
+  cert: fs.readFileSync(certPath),
+  minVersion: "TLSv1.3",
+});
+
+deployServer.on("stream", (stream, headers) => {
+  let msg = "";
+
+  stream.on("data", (chunk) => {
+    msg += chunk.toString("utf-8");
+  });
+
+  stream.on("end", () => {
+    console.log("Received message:", msg);
+    stream.respond({ ":status": 200 });
+    stream.end(JSON.stringify({ status: 200, message: "Message received" }));
+  });
+});
+
+deployServer.listen(8080, () => {
+  console.log("Server is listening on port 8080");
+});

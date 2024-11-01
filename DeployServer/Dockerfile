@@ -1,5 +1,5 @@
 FROM node:alpine
-WORKDIR /usr/deployServer
+WORKDIR /usr/deployServer/server
 COPY . .
 
 EXPOSE 8080
