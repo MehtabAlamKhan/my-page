@@ -23,11 +23,33 @@ deployServer.on("stream", (stream, headers) => {
   });
 
   stream.on("end", () => {
-    console.log("Received message:", msg);
+    startDeployment(msg);
     stream.respond({ ":status": 200 });
     stream.end(JSON.stringify({ status: 200, message: "Message received" }));
   });
 });
+
+function startDeployment(msg) {
+  console.log(JSON.parse(msg).msg);
+  if (JSON.parse(msg).msg == "DEPLOY") {
+    const exec = require("node:child_process");
+    const scriptPath = "./deply.sh";
+
+    const process = exec.exec(`bash ${scriptPath}`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error executing script: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.error(`Script stderr: ${stderr}`);
+        return;
+      }
+    });
+    process.on("exit", (code) => {
+      console.log(`Process exited with code ${code}`);
+    });
+  }
+}
 
 deployServer.listen(8080, () => {
   console.log("Server is listening on port 8080");
