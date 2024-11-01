@@ -19,7 +19,7 @@ if git pull origin master; then
     if [ "$(git diff --stat HEAD@{1} HEAD)" ]; then
         log "Changes detected, rebuilding and restarting Docker containers."
         # Run Docker Compose to rebuild and start containers
-        if docker-compose up -d --build; then
+        if docker compose up -d --build; then
             log "Docker Compose started successfully."
         else
             log "Failed to run Docker Compose."
