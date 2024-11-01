@@ -2,6 +2,7 @@ import http2 from "node:http2";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import fs from "node:fs";
+import { exec } from "node:child_process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,10 +33,9 @@ deployServer.on("stream", (stream, headers) => {
 function startDeployment(msg) {
   console.log(JSON.parse(msg).msg);
   if (JSON.parse(msg).msg == "DEPLOY") {
-    const exec = require("node:child_process");
     const scriptPath = "./deply.sh";
 
-    const process = exec.exec(`bash ${scriptPath}`, (error, stdout, stderr) => {
+    const deployProcess = exec(`bash ${scriptPath}`, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing script: ${error.message}`);
         return;
@@ -45,7 +45,7 @@ function startDeployment(msg) {
         return;
       }
     });
-    process.on("exit", (code) => {
+    deployProcess.on("exit", (code) => {
       console.log(`Process exited with code ${code}`);
     });
   }
