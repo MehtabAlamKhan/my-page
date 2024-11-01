@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # Define your project directory
 PROJECT_DIR="/home/jason5/my-page"
