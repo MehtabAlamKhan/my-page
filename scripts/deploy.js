@@ -1,6 +1,6 @@
 import http from "node:http";
 
-let data = { msg: "DEPLOY" };
+let data = JSON.stringify({ msg: "DEPLOY" });
 
 const options = {
   hostname: "https://deploy.mehtab.in",
