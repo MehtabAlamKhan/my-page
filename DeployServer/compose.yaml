@@ -1,0 +1,7 @@
+services:
+  deploy-server:
+    image: deploy-server
+    container_name: dpServer
+    build: .
+    ports:
+      - '8080:8080'
