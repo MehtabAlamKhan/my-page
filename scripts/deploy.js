@@ -3,7 +3,7 @@ import http from "node:http";
 let data = JSON.stringify({ msg: "DEPLOY" });
 
 const options = {
-  hostname: "deploy.mehtab.in",
+  hostname: "127.0.0.1",
   port: 8080,
   method: "POST",
   headers: {
@@ -18,6 +18,7 @@ const req = http.request(options, (res) => {
   });
 });
 req.on("error", (error) => {
+  console.log(error);
   process.exit(1);
 });
 req.write(data);
