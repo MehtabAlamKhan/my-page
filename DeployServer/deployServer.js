@@ -8,8 +8,8 @@ const deployServer = http
     });
     req.on("end", () => {
       console.log(msg);
-      res.writeHead(200);
-      res.end();
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ status: 200, message: "Message received" }));
     });
   })
   .listen(8080);

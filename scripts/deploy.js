@@ -3,7 +3,7 @@ import http from "node:http";
 let data = JSON.stringify({ msg: "DEPLOY" });
 
 const options = {
-  hostname: "https://deploy.mehtab.in",
+  hostname: "http://deploy.mehtab.in",
   port: 8080,
   path: "/",
   method: "POST",
