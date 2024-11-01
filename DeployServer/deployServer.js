@@ -33,7 +33,7 @@ deployServer.on("stream", (stream, headers) => {
 function startDeployment(msg) {
   console.log(JSON.parse(msg).msg);
   if (JSON.parse(msg).msg == "DEPLOY") {
-    const scriptPath = "./deply.sh";
+    const scriptPath = "./deploy.sh";
 
     const deployProcess = exec(`bash ${scriptPath}`, (error, stdout, stderr) => {
       if (error) {
