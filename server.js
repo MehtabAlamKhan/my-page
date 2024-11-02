@@ -44,8 +44,7 @@ server.on("stream", (stream, headers) => {
     });
     stream.end(compress(minifier.minify(homePage, { removeAttributeQuotes: true, removeComments: true })));
     return;
-  }
-  if (headers[":path"] == "/F.woff") {
+  } else if (headers[":path"] == "/F.woff") {
     stream.respond({
       ":status": 200,
       "content-type": "application/font-woff",
@@ -54,6 +53,21 @@ server.on("stream", (stream, headers) => {
     });
     stream.end(compress(font));
     return;
+  } else {
+    stream.respond({
+      ":status": 404,
+      "content-type": "text/html;charset=utf-8",
+      "Content-Encoding": "gzip",
+    });
+    stream.end(
+      compress(`
+      <html>
+          <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+              <h1 style="text-align: center;font-family: monospace;">404 Not Found - 💩</h1>
+          </body>
+      </html>
+  `)
+    );
   }
 });
 server.on("sessionError", (err) => {});
