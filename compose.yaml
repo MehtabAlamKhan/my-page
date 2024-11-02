@@ -9,5 +9,5 @@ services:
       - /etc/letsencrypt/live/mehtab.in/fullchain.pem:/etc/ssl/certs/fullchain.pem  
       - /etc/letsencrypt/live/mehtab.in/privkey.pem:/etc/ssl/private/privkey.pem  
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=PROD
     restart: unless-stopped
