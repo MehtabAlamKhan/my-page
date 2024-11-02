@@ -7,4 +7,3 @@ services:
       - '8080:8080'
     volumes:
       - /home/jason5/my-page:/home/jason5/my-page
-    working_dir: /home/jason5/my-page

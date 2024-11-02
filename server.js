@@ -7,13 +7,18 @@ import minifier from "html-minifier";
 import os from "node:os";
 import cluster from "node:cluster";
 
-// Get the __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const cores = os.cpus().length;
 
-let keyPath = path.join(__dirname, "cert", "key.pem");
-let certPath = path.join(__dirname, "cert", "cert.pem");
+let keyPath, certPath;
+if (process.env.NODE_ENV === "PROD") {
+  keyPath = "/etc/ssl/private/privkey.pem";
+  certPath = "/etc/ssl/certs/fullchain.pem";
+} else {
+  keyPath = path.join(__dirname, "cert", "key.pem");
+  certPath = path.join(__dirname, "cert", "cert.pem");
+}
 
 let server = http2.createSecureServer({
   key: fs.readFileSync(keyPath),

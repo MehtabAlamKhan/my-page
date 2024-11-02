@@ -1,0 +1,10 @@
+services:
+  my-page:
+    image: mypage
+    container_name: c1
+    build: .
+    ports:
+      - '443:443'
+    environment:
+      - NODE_ENV=dev
+    restart: unless-stopped

@@ -5,3 +5,9 @@ services:
     build: .
     ports:
       - '443:443'
+    volumes:
+      - /etc/letsencrypt/live/mehtab.in/fullchain.pem:/etc/ssl/certs/fullchain.pem  
+      - /etc/letsencrypt/live/mehtab.in/privkey.pem:/etc/ssl/private/privkey.pem  
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
